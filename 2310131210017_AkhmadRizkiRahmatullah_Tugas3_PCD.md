@@ -21,17 +21,23 @@ Dr. Harja Santana Purba, M.Kom./Novan A.B. Saputra, S.Kom., M.T
 <br>
 <br>
 
+
+<div align="center">
+ 
+### Pendahuluan
+
+</div>
+
+Pemrosesan gambar halftone adalah proses yang umum digunakan untuk mengompresi informasi yang terkandung dalam suatu gambar.Fakta ini memungkinkan untuk mencetak atau menampilkan gambar dalam berbagai format. Contoh penggunaan halftone adalah penerbitan cetak offset, seperti surat kabar, majalah, dan buku. Jenis offset ini paling banyak digunakan di industri untuk menjangkau khalayak dalam skala besar. Dengan menggunakan titik-titik untuk membentuk objek dalam gambar,  persepsi dapat dikelabui dan menampilkan tingkat abu-abu yang berbeda.
+
+Proses halftoning dilakukan melalui gambar dengan mengikuti lintasan dari atas ke bawah dan dari kiri ke kanan. Selama prosedur ini, piksel dievaluasi dengan kernel. Tujuannya adalah untuk mendistribusikan kesalahan P(i,j) karena piksel yang dibinerisasi menghasilkan kesalahan akumulatif. Kesalahan didistribusikan antara lingkungan bawah dan kiri.
+
+
 <div align="center">
  
 ### Pembahasan
 
 </div>
-
-#### Pengertian Halftoning
-
-Pemrosesan gambar halftone adalah proses yang umum digunakan untuk mengompresi informasi yang terkandung dalam suatu gambar.Fakta ini memungkinkan untuk mencetak atau menampilkan gambar dalam berbagai format. Contoh penggunaan halftone adalah penerbitan cetak offset, seperti surat kabar, majalah, dan buku. Jenis offset ini paling banyak digunakan di industri untuk menjangkau khalayak dalam skala besar. Dengan menggunakan titik-titik untuk membentuk objek dalam gambar,  persepsi dapat dikelabui dan menampilkan tingkat abu-abu yang berbeda.
-
-Proses halftoning dilakukan melalui gambar dengan mengikuti lintasan dari atas ke bawah dan dari kiri ke kanan. Selama prosedur ini, piksel dievaluasi dengan kernel. Tujuannya adalah untuk mendistribusikan kesalahan P(i,j) karena piksel yang dibinerisasi menghasilkan kesalahan akumulatif. Kesalahan didistribusikan antara lingkungan bawah dan kiri.
 
 #### Method Pada Halftoning
 1. **_Error diffusion_**
@@ -120,11 +126,106 @@ Berikut adalah output dari kode program tersebut:
 Patterning adalah yang paling sederhana dari tiga teknik untuk menghasilkan gambar halftoning digital. Teknik ini menghasilkan gambar dengan resolusi spasial yang lebih tinggi daripada gambar sumber. Jumlah sel halftone gambar output sama dengan jumlah piksel gambar sumber. Namun demikian, setiap sel halftone dibagi lagi ke dalam ukuran 4x4. Tiap nilai piksel input diwakili oleh jumlah kotak terisi yang berbeda dalam sel halftone. Karena ukuran 4x4 hanya dapat merepresentasikan 17 tingkat intensitas yang berbeda, maka gambar sumber harus dikuantisasi.
 
 <figure>
-  <img src="https://example.com/image.png" alt="Image description">
-  <figcaption>This is the image caption.</figcaption>
+  <img src="patterning.png" alt="Image description">
+  <figcaption>Matriks pola rekursif Rylander</figcaption>
 </figure>
+<br>
+<figure>
+  <img src="patterning2.png" alt="Image description">
+  <figcaption>Operasi patterning</figcaption>
+</figure>
+<br>
 
-3. **_Ordered Dithering_**
+Berikut adalah kode program pada _patterning_:
+
+```matlab
+clc;
+clear;
+
+image = imread('4.1.03.tiff');
+image = im2double(image);
+
+gridSize = 10;
+
+
+[rows, cols] = size(image);
+
+halftoneImage = zeros(rows, cols);
+
+for i = 1:gridSize:rows-gridSize+1
+    for j = 1:gridSize:cols-gridSize+1
+        block = image(i:i+gridSize-1, j:j+gridSize-1);
+        avgIntensity = mean(block(:));
+
+        radius = round(avgIntensity * (gridSize / 2));
+
+        [xGrid, yGrid] = meshgrid(1:gridSize, 1:gridSize);
+        center = gridSize / 2;
+        circle = sqrt((xGrid - center).^2 + (yGrid - center).^2) <= radius;
+
+        halftoneImage(i:i+gridSize-1, j:j+gridSize-1) = circle;
+    end
+end
+
+figure;
+subplot(1, 2, 1);
+imshow(image); title('Original Image (Grayscale)');
+
+subplot(1, 2, 2);
+imshow(halftoneImage); title('Halftone Patterning');
+```
+Berikut adalah tampilan outputnya:
+
+![Errror diffusion](output_patterning.png)
+
+3. **_Dithering_**
+
+Teknik lain yang digunakan untuk menghasilkan gambar halftoning digital adalah dithering. Tidak seperti patterning, dithering menciptakan gambar output dengan jumlah titik yang sama dengan jumlah piksel dalam gambar sumber. Dithering dapat dianggap sebagai _thresholding_ gambar sumber dengan matriks _dither_. Matriks diletakkan berulang kali di atas gambar sumber. Di mana pun nilai piksel gambar lebih besar daripada nilai dalam matriks, titik pada gambar output akan terisi. Masalah yang terkenal dari dithering adalah menghasilkan artefak pola yang diperkenalkan oleh matriks _thresholding_ yang tetap. Berikut adalah contoh operasi _dithering_:
+
+<figure>
+  <img src="patterning.png" alt="Image description">
+  <figcaption>Matriks pola rekursif Rylander</figcaption>
+</figure>
+<br>
+
+
+Berikut adalah kode program dithering:
+
+```matlab
+img = imread('4.1.03.tiff');
+gray = rgb2gray(img);
+[m, n] = size(gray);
+dithered_img = zeros(m, n);
+
+for i = 1:m
+    for j = 1:n
+        oldPixel = gray(i, j);
+        newPixel = round(oldPixel / 255) * 255;
+        dithered_img(i, j) = newPixel;
+        quant_error = oldPixel - newPixel;
+        if j+1 <= n
+            gray(i, j+1) = gray(i, j+1) + quant_error * 7 / 16;
+        end
+        if i+1 <= m && j-1 >= 1
+            gray(i+1, j-1) = gray(i+1, j-1) + quant_error * 3 / 16;
+        end
+        if i+1 <= m
+            gray(i+1, j) = gray(i+1, j) + quant_error * 5 / 16;
+        end
+        if i+1 <= m && j+1 <= n
+            gray(i+1, j+1) = gray(i+1, j+1) + quant_error * 1 / 16;
+        end
+    end
+end
+
+imshow(uint8(dithered_img));
+```
+
+Berikut adalah hasil outputnya:
+
+![Dithering]()
+
+4. **_Ordered Dithering_**
 
 _Ordered dithering_ dilakukan dengan membandingkan tiap blok dari citra asli dengan sebuah matriks pembatas (matriks threshold) yang disebut dengan matriks dither. Masing-masing elemen dari blok asli dikuantisasi sesuai dengan nilai batas pada pola dither. Nilai-nilai pada matriks dither adalah tetap, tetapi bisa bervariasi sesuai dengan jenis citra.
 
