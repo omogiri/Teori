@@ -68,7 +68,7 @@ clear;
 clc;
 
 
-img = imread('1.png');
+img = imread('4.1.03.tiff');
 if size(img,3) == 3
     img = rgb2gray(img);  
 end
@@ -113,8 +113,18 @@ subplot(1, 2, 2), imshow(output_img, []), title('Hasil Floyd-Steinberg Error Dif
 imwrite(output_img, 'output_image.png');
 
 ```
+Berikut adalah output dari kode program tersebut:
+![Errror diffusion](errordiffusion3.png) 
+2. **_Patterning_**
 
-2. **_Ordered Dithering_**
+Patterning adalah yang paling sederhana dari tiga teknik untuk menghasilkan gambar halftoning digital. Teknik ini menghasilkan gambar dengan resolusi spasial yang lebih tinggi daripada gambar sumber. Jumlah sel halftone gambar output sama dengan jumlah piksel gambar sumber. Namun demikian, setiap sel halftone dibagi lagi ke dalam ukuran 4x4. Tiap nilai piksel input diwakili oleh jumlah kotak terisi yang berbeda dalam sel halftone. Karena ukuran 4x4 hanya dapat merepresentasikan 17 tingkat intensitas yang berbeda, maka gambar sumber harus dikuantisasi.
+
+<figure>
+  <img src="https://example.com/image.png" alt="Image description">
+  <figcaption>This is the image caption.</figcaption>
+</figure>
+
+3. **_Ordered Dithering_**
 
 _Ordered dithering_ dilakukan dengan membandingkan tiap blok dari citra asli dengan sebuah matriks pembatas (matriks threshold) yang disebut dengan matriks dither. Masing-masing elemen dari blok asli dikuantisasi sesuai dengan nilai batas pada pola dither. Nilai-nilai pada matriks dither adalah tetap, tetapi bisa bervariasi sesuai dengan jenis citra.
 
