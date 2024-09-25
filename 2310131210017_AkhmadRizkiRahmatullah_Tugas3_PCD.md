@@ -21,10 +21,19 @@ Dr. Harja Santana Purba, M.Kom./Novan A.B. Saputra, S.Kom., M.T
 <br>
 <br>
 
+<div align="center">
+ 
+### DAFTAR ISI
+
+</div>
+
+- [Pendahuluan](#pendahuluan)
+- [Latar Belakang](#pembahasan)
+- [Daftar Pustaka](#daftar-pustaka)
 
 <div align="center">
  
-### Pendahuluan
+### PENDAHULUAN
 
 </div>
 
@@ -35,7 +44,7 @@ Proses halftoning dilakukan melalui gambar dengan mengikuti lintasan dari atas k
 
 <div align="center">
  
-### Pembahasan
+### PEMBAHASAN
 
 </div>
 
@@ -182,12 +191,7 @@ Berikut adalah tampilan outputnya:
 
 Teknik lain yang digunakan untuk menghasilkan gambar halftoning digital adalah dithering. Tidak seperti patterning, dithering menciptakan gambar output dengan jumlah titik yang sama dengan jumlah piksel dalam gambar sumber. Dithering dapat dianggap sebagai _thresholding_ gambar sumber dengan matriks _dither_. Matriks diletakkan berulang kali di atas gambar sumber. Di mana pun nilai piksel gambar lebih besar daripada nilai dalam matriks, titik pada gambar output akan terisi. Masalah yang terkenal dari dithering adalah menghasilkan artefak pola yang diperkenalkan oleh matriks _thresholding_ yang tetap. Berikut adalah contoh operasi _dithering_:
 
-<figure>
-  <img src="patterning.png" alt="Image description">
-  <figcaption>Matriks pola rekursif Rylander</figcaption>
-</figure>
-<br>
-
+![operasi dithering](dithering.png)
 
 Berikut adalah kode program dithering:
 
@@ -223,7 +227,7 @@ imshow(uint8(dithered_img));
 
 Berikut adalah hasil outputnya:
 
-![Dithering]()
+![Dithering](output_dithering.png)
 
 4. **_Ordered Dithering_**
 
@@ -252,6 +256,24 @@ b(i,j) = Matriks hasil _halftoning_
 T(i,j) = Matriks _threshold_
 
 f(i,j) = Matriks citra
+
+Berikut adalah kode programnya:
+
+```matlab
+I = imread('4.1.03.tiff');
+I = rgb2gray(I);
+I = im2double(I);
+[rows, cols] = size(I);
+dither_matrix = [1 9 3 11; 13 5 15 7; 4 12 2 10; 16 8 14 6] / 17;
+dither_matrix = repmat(dither_matrix, ceil(rows/4), ceil(cols/4));
+dither_matrix = dither_matrix(1:rows, 1:cols);
+output_image = I > dither_matrix;
+imshow(output_image);
+```
+
+Berikut adalah tampilan outputnya:
+
+![Ordered Dithering](output_ordered_dithering.png)
 
 <br>
 <br>
