@@ -15,11 +15,17 @@ Dr. Harja Santana Purba, M.Kom./Novan A.B. Saputra, S.Kom., M.T
 ### FAKULTAS KEGURUAN DAN ILMU PENDIDIKAN
 ### UNIVERSITAS LAMBUNG MANGKURAT
 ### 2024
+
+</div>
 <br>
 <br>
 <br>
 
+<div align="center">
+ 
 ### Pembahasan
+
+</div>
 
 #### Pengertian Halftoning
 
@@ -88,7 +94,11 @@ f(i,j) = Matriks citra
 <br>
 <br>
 
+<div align="center">
+
 ### DAFTAR PUSTAKA
+
+</div>
 
 Ortega-Sánchez, N, et al. (2020).  An Evolutionary Approach to Improve the Halftoning Process._Mathematics_,  _8(9)_, 1-23.
 
