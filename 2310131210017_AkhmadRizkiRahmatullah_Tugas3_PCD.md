@@ -291,3 +291,5 @@ Raharjo, W. S. & Aguswahyudi, D. (2016). Implementasi Skema Meaningful Sharing p
 
 Stefanus, Tony, & Teny H. (2016). APLIKASI HALFTONE QR-CODE DENGAN METODE ORDERED DITHERING. _Seminar Nasional Sistem Informasi Indonesia_, 353-358.
 
+https://people.ece.ubc.ca/irenek/techpaps/introip/manual04.html
+
