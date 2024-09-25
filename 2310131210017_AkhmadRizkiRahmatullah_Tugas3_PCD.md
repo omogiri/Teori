@@ -96,7 +96,7 @@ for i = 1:rows
     for j = 1:cols
         old_pixel = output_img(i, j);
 
-        % Kuantisasi nilai piksel (thresholding)
+        
         if old_pixel > 0.5
             new_pixel = 1;
         else
@@ -104,7 +104,7 @@ for i = 1:rows
         end
         output_img(i, j) = new_pixel;
         quant_error = old_pixel - new_pixel;
-        if j + 1 <= cols  % Piksel kanan (7/16)
+        if j + 1 <= cols  
             output_img(i, j + 1) = output_img(i, j + 1) + quant_error * 7/16;
         end
 
