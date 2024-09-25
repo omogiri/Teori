@@ -62,6 +62,58 @@ Keterangan:
  = selisih dari nilai dari _pixel_ baru dengan
 _quantized pixel_ value  
 
+Berikut adalah contoh kode program pada _error diffusion_:
+```matlab% Program MATLAB untuk Floyd-Steinberg Error Diffusion Dithering
+clear;
+clc;
+
+
+img = imread('1.png');
+if size(img,3) == 3
+    img = rgb2gray(img);  
+end
+img = double(img) / 255;
+
+[rows, cols] = size(img);
+output_img = img;  
+kernel = [0 0 7; 3 5 1] / 16;
+for i = 1:rows
+    for j = 1:cols
+        old_pixel = output_img(i, j);
+
+        % Kuantisasi nilai piksel (thresholding)
+        if old_pixel > 0.5
+            new_pixel = 1;
+        else
+            new_pixel = 0;
+        end
+        output_img(i, j) = new_pixel;
+        quant_error = old_pixel - new_pixel;
+        if j + 1 <= cols  % Piksel kanan (7/16)
+            output_img(i, j + 1) = output_img(i, j + 1) + quant_error * 7/16;
+        end
+
+        if i + 1 <= rows
+            if j - 1 >= 1  % Piksel kiri-bawah (3/16)
+                output_img(i + 1, j - 1) = output_img(i + 1, j - 1) + quant_error * 3/16;
+            end
+
+            % Piksel bawah (5/16)
+            output_img(i + 1, j) = output_img(i + 1, j) + quant_error * 5/16;
+
+            if j + 1 <= cols  % Piksel kanan-bawah (1/16)
+                output_img(i + 1, j + 1) = output_img(i + 1, j + 1) + quant_error * 1/16;
+            end
+        end
+    end
+end
+figure;
+subplot(1, 2, 1), imshow(img, []), title('Gambar Grayscale Asli');
+subplot(1, 2, 2), imshow(output_img, []), title('Hasil Floyd-Steinberg Error Diffusion');
+imwrite(output_img, 'output_image.png');
+
+```
+
 2. **_Ordered Dithering_**
 
 _Ordered dithering_ dilakukan dengan membandingkan tiap blok dari citra asli dengan sebuah matriks pembatas (matriks threshold) yang disebut dengan matriks dither. Masing-masing elemen dari blok asli dikuantisasi sesuai dengan nilai batas pada pola dither. Nilai-nilai pada matriks dither adalah tetap, tetapi bisa bervariasi sesuai dengan jenis citra.
