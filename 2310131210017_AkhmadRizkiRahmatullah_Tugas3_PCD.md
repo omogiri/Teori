@@ -1,8 +1,10 @@
+<div align="center">
+
 ### TUGAS 3
 ### PEMROSESAN CITRA DIGITAL
 ### (ABKC6306)
  
-<img src="lambangULM2021warna.png" alt="drawing" width="200"/>
+<img src="lambangULM2021warna.png" alt="drawing" width="200"/> 
 
 ### DISUSUN OLEH:
 Akhmad Rizki Rahmatullah (2310131210017)
